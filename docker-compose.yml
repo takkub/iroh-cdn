@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-iroh}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-iroh}
+      POSTGRES_DB: ${POSTGRES_DB:-irohcdn}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-iroh} -d ${POSTGRES_DB:-irohcdn}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+      - api/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${API_PORT:-6666}:6666"
+    volumes:
+      - iroh_repo:/var/lib/iroh
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+      - web/.env
+    ports:
+      - "${WEB_PORT:-5555}:5555"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  iroh_repo:

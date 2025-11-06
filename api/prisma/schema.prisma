@@ -1,0 +1,19 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Asset {
+  id        String   @id @default(cuid())
+  cid       String   @unique
+  filename  String
+  mime      String
+  size      Int
+  pinned    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  uploader  String?
+}
