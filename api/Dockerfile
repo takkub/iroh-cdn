@@ -33,7 +33,7 @@ COPY package.json package-lock.json* ./
 RUN npm install
 
 # Prisma & Nest config
-COPY prisma ./prisma
+COPY prisma/schema.prisma ./prisma/schema.prisma
 COPY tsconfig.json nest-cli.json ./
 
 # โค้ดแอป
@@ -45,9 +45,9 @@ RUN npx prisma generate
 # **สำคัญ**: Build NestJS → สร้างโฟลเดอร์ dist/
 RUN npm run build
 
-# Entrypoint จะ migrate แล้วรัน dist/main.js
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+# Copy and setup entrypoint script
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
 
 EXPOSE 4000
-CMD ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
