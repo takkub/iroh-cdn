@@ -47,7 +47,8 @@ RUN npm run build
 
 # Copy and setup entrypoint script
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
-RUN chmod +x /app/docker-entrypoint.sh
+# Convert CRLF to LF and make executable
+RUN sed -i 's/\r$//' /app/docker-entrypoint.sh && chmod +x /app/docker-entrypoint.sh
 
-EXPOSE 4000
+EXPOSE 6666
 ENTRYPOINT ["/app/docker-entrypoint.sh"]

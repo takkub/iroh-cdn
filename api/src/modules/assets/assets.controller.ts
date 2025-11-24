@@ -1,5 +1,5 @@
 import {
-  Controller, Get, Post, Delete, Param, UploadedFile, UseInterceptors, Res, HttpException, HttpStatus, Body, Query
+  Controller, Get, Post, Delete, Param, UploadedFile, UseInterceptors, Res, HttpException, HttpStatus,  Query, UseGuards, Request
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -8,6 +8,7 @@ import { Response } from 'express';
 import type { Express } from 'express';
 import { AssetsService } from './assets.service';
 import { irohGetStream } from './iroh';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 function filenameFn(_: any, file: Express.Multer.File, cb: (e: any, fileName?: string) => void) {
   const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -16,8 +17,9 @@ function filenameFn(_: any, file: Express.Multer.File, cb: (e: any, fileName?: s
 
 @Controller('assets')
 export class AssetsController {
-  constructor(private readonly assets: AssetsService) {}
+  constructor(private readonly assets: AssetsService) { }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({ destination: '/tmp', filename: filenameFn }),
@@ -28,9 +30,9 @@ export class AssetsController {
       files: 1
     }
   }))
-  async create(@UploadedFile() file: Express.Multer.File, @Body('uploader') uploader?: string) {
+  async create(@UploadedFile() file: Express.Multer.File, @Request() req) {
     if (!file) throw new HttpException('file required', HttpStatus.BAD_REQUEST);
-    return this.assets.createFromPath(file, uploader);
+    return this.assets.createFromPath(file, req.user.userId);
   }
 
   @Get()

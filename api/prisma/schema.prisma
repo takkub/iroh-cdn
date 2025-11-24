@@ -7,6 +7,41 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
+enum SubscriptionPlan {
+  FREE
+  PRO
+  BUSINESS
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  apiKey    String   @unique @default(uuid())
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  subscription Subscription?
+  assets       Asset[]
+}
+
+model Subscription {
+  id        String           @id @default(uuid())
+  userId    String           @unique
+  plan      SubscriptionPlan @default(FREE)
+  startDate DateTime         @default(now())
+  endDate   DateTime?
+  isActive  Boolean          @default(true)
+  
+  user      User             @relation(fields: [userId], references: [id])
+}
+
 model Asset {
   id        String   @id @default(cuid())
   cid       String   @unique
@@ -15,5 +50,7 @@ model Asset {
   size      Int
   pinned    Boolean  @default(true)
   createdAt DateTime @default(now())
-  uploader  String?
+  
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
 }

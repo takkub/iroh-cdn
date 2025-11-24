@@ -1,5 +1,6 @@
 import '../styles/globals.css';
 import { ReactNode } from 'react';
+import SessionProvider from '@/components/SessionProvider';
 
 export const metadata = {
   title: 'ระบบจัดเก็บและแชร์ไฟล์',
@@ -10,7 +11,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
-        {children}
+        <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
   );

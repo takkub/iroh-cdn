@@ -20,8 +20,8 @@ async function bootstrap() {
   app.use(json({ limit: '50gb' }));
   app.use(urlencoded({ extended: true, limit: '50gb' }));
 
-  const port = process.env.PORT ? Number(process.env.PORT) : 6666;
+  const port = process.env.PORT ? Number(process.env.PORT) : 3333;
   await app.listen(port, '0.0.0.0');
-  console.log(`[api] listening on ${port}`);
+  console.log(`[api] listening on http://0.0.0.0:${port}`);
 }
 bootstrap();

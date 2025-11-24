@@ -23,7 +23,7 @@ function guessMimeByExt(name: string) {
     '.bmp': 'image/bmp',
     '.tiff': 'image/tiff',
     '.tif': 'image/tiff',
-    
+
     // Videos
     '.mp4': 'video/mp4',
     '.avi': 'video/x-msvideo',
@@ -86,16 +86,16 @@ function guessMimeByExt(name: string) {
 
 @Injectable()
 export class AssetsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
-  async createFromPath(file: Express.Multer.File, uploader?: string) {
+  async createFromPath(file: Express.Multer.File, userId?: string) {
     const { cid } = await irohAdd(file.path);
 
     // Check if file with this CID already exists
     const existing = await this.prisma.asset.findUnique({ where: { cid } });
     if (existing) {
       // File already exists, just clean up temp file and return existing record
-      try { await fs.unlink(file.path); } catch {}
+      try { await fs.unlink(file.path); } catch { }
       return { cid, asset: existing, alreadyExists: true };
     }
 
@@ -106,7 +106,7 @@ export class AssetsService {
     console.log(decodedFilename)
     try {
       decodedFilename = decodeURIComponent(file.originalname);
-        // decodedFilename = decodeURIComponent(escape(file.originalname));
+      // decodedFilename = decodeURIComponent(escape(file.originalname));
     } catch {
       // If decode fails, use original name
       decodedFilename = file.originalname;
@@ -119,12 +119,12 @@ export class AssetsService {
         mime,
         size: file.size,
         pinned: true,
-        uploader,
+        userId,
       }
     });
     // cleanup temp
-    try { await fs.unlink(file.path); } catch {}
-    return { cid, asset,decodedFilename };
+    try { await fs.unlink(file.path); } catch { }
+    return { cid, asset, decodedFilename };
   }
 
   async list() {

@@ -1,1 +1,118 @@
-/.idea/
+# ============================================
+# IDEs and Editors
+# ============================================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# ============================================
+# Dependencies
+# ============================================
+node_modules/
+api/node_modules/
+web/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-store/
+
+# ============================================
+# Environment Variables
+# ============================================
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+api/.env
+web/.env
+
+# ============================================
+# Next.js (web folder)
+# ============================================
+.next/
+web/.next/
+web/out/
+web/build/
+web/.swc/
+
+# ============================================
+# NestJS (api folder)
+# ============================================
+dist/
+api/dist/
+api/build/
+
+# ============================================
+# Build Outputs
+# ============================================
+build/
+out/
+*.tsbuildinfo
+.turbo/
+
+# ============================================
+# Testing
+# ============================================
+coverage/
+.nyc_output/
+*.lcov
+.jest/
+
+# ============================================
+# Logs
+# ============================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ============================================
+# OS Files
+# ============================================
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+
+# ============================================
+# Docker
+# ============================================
+docker-compose.override.yml
+
+# Docker volumes data (if mapped locally)
+db_data/
+postgres_data/
+iroh_data/
+iroh_repo/
+
+# ============================================
+# Prisma
+# ============================================
+api/prisma/migrations/
+*.db
+*.db-journal
+
+# ============================================
+# Uploads & Temp Files
+# ============================================
+uploads/
+temp/
+tmp/
+
+# ============================================
+# Lock Files (optional - uncomment to ignore)
+# ============================================
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
